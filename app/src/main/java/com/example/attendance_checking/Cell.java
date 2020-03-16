@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.attendance_checking;
 
 public class Cell {
     int id;
