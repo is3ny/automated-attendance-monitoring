@@ -14,26 +14,28 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         ListView listView = findViewById(R.id.list_view);
+
         ArrayList<Student> students = new ArrayList<>();
         students.add(new Student());
+
         Professor p1 = new Professor("Luiz Jonata");
-        Professor p2 = new Professor("Some Strange Name");
-        Attendance a1 = new Attendance(new Boolean[]{true, false, true});
-        Attendance a2 = new Attendance(new Boolean[]{false, false, true, true, true});
         Course c1 = new Course("Course number One", p1);
-        Course c2 = new Course("Course number Two", p2);
+        Attendance a1 = new Attendance(new Boolean[]{true, false, true});
         c1.addAttendance(students.get(0), a1);
+
+        Professor p2 = new Professor("Some Strange Name");
+        Course c2 = new Course("Course number Two", p2);
+        Attendance a2 = new Attendance(new Boolean[]{false, false, true, true, true});
         c2.addAttendance(students.get(0), a2);
+
         ArrayList<Course> courses = new ArrayList<>();
         courses.add(c1);
         courses.add(c2);
 
-
+        // Making list items appear on screen
         CourseListAdapter adapter = new CourseListAdapter(courses, students.get(0), this);
-
-        // настраиваем список
-
         listView.setAdapter(adapter);
     }
 }
