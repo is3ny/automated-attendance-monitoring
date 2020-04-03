@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,19 +22,21 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingStart="2dp"
-            android:text="Introduction to AI"
+            android:paddingLeft="2dp"
             android:textAlignment="viewStart"
+            android:gravity="start"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/list_course_proff_name"
+            android:id="@+id/list_course_prof_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingStart="2dp"
-            android:text="Alexander Brown"
+            android:paddingLeft="2dp"
             android:textAlignment="viewStart"
+            android:gravity="start"
             android:textColor="@android:color/black"
             android:textSize="16sp" />
 
@@ -45,13 +46,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingEnd="2dp"
-            android:text="5/6 (66%) visited"
+            android:paddingRight="2dp"
             android:textAlignment="viewEnd"
+            android:gravity="end"
             android:textColor="@android:color/black"
             android:textSize="16sp" />
 
         <LinearLayout
-
             android:id="@+id/list_attendance"
             android:layout_width="match_parent"
             android:layout_height="16dp"

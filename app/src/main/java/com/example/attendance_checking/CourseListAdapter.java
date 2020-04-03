@@ -55,7 +55,7 @@ public class CourseListAdapter extends BaseAdapter {
         String profNameField
                 = String.format(Locale.ENGLISH, "Prof: %s", currentCourse.professor.name);
         ((TextView) view.findViewById(R.id.list_course_name)).setText(currentCourse.courseName);
-        ((TextView) view.findViewById(R.id.list_course_proff_name)).setText(profNameField);
+        ((TextView) view.findViewById(R.id.list_course_prof_name)).setText(profNameField);
         ((TextView) view.findViewById(R.id.list_course_percentage)).setText(attendanceStat.toString());
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
