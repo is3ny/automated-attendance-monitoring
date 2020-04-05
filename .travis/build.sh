@@ -1,6 +1,6 @@
 #!/bin/bash
 
-git fetch --unshallow #required for commit count
+# git fetch --unshallow #required for commit count
 
 ./gradlew clean assembleStandardDebug
 
