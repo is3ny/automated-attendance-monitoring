@@ -2,7 +2,7 @@
 
 # git fetch --unshallow #required for commit count
 
-./gradlew clean assembleStandardDebug
+./gradlew clean assemble
 
 COMMIT_COUNT=$(git rev-list --count HEAD)
 export ARTIFACT="aam-r${COMMIT_COUNT}.apk"
