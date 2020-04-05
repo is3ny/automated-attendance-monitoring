@@ -2,23 +2,30 @@ language: android
 dist: trusty
 android:
   components:
-    # Uncomment the lines below if you want to
-    # use the latest revision of Android SDK Tools
-    # - tools
-    # - platform-tools
-
-    # The BuildTools version used by your project
-    - build-tools-29.0.3
-
-    # The SDK version used to compile your project
-    - android-29
-
-    # Additional components
-    - extra-google-google_play_services
-    - extra-google-m2repository
-    - extra-android-m2repository
-    - extra-android-support
+  - build-tools-29.0.3
+  - android-29
+  - extra-google-google_play_services
+  - extra-google-m2repository
+  - extra-android-m2repository
+  - extra-android-support
 before_install:
-    - mkdir "$ANDROID_HOME/licenses" || true
-    - echo -e "\n24333f8a63b6825ea9c5514f83c2829b004d1fee" > "$ANDROID_HOME/licenses/android-sdk-license"
-script: ".travis/build.sh" 
+- mkdir "$ANDROID_HOME/licenses" || true
+- echo -e "\n24333f8a63b6825ea9c5514f83c2829b004d1fee" > "$ANDROID_HOME/licenses/android-sdk-license"
+script: ".travis/build.sh"
+before_cache:
+- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+- rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+  - "$HOME/.gradle/caches/"
+  - "$HOME/.gradle/wrapper/"
+deploy:
+  provider: releases
+  api_key:
+    secure: bCTPxSeatyxSecGFEW0GWl/1UMtTQc1uOBo30r1oEqNFME9Ut3WfoNHrELu9p94scBAdjqfS++D2/93ytqVldF/x1kQZdXRkM1ubaMscaXKRIYutGrNqEfMoxEZPeC6xRdAmlX1Lrmhve2dudCTePUOfnJoNS0EB5xHOsY7YqP4oFW7uhFHn5vb+Fe+DxcTHG2pS89Fici2J5fcBhu9lqGNiecgnmfZXaEdVtJAI6+GOH6OYrdK490vE3VQuF2/x5iTV0RJ6CGbjlkfTE6cLY/Fh5z8Ss3iHjVBiCgyfZA+rKWli61MSTEyc/FhY5pCxmJHkfX2xlhdpLlHj1dj11gxXwmnYhMpVusZL93eDPEajWQOfPEvaMb8/lXZmMs+hgPpWvyNMnJ3LJVI5GYxX4YyJVjZjawfKq1/JbwHc1v5JqDRQlOoHdQL3RT+DhUd49FBxSonNSe5H8PT2dCXj8fquxdG+Z+L4Z175BpH1P8D33xsaYjXt/W5DUcW+05hfU5eqpQQpZOPaBv6+iNtSwa2C41cB8f2FTSoN72EXGIbA7EbR2j2Qm5VRDt3GWxZJwqRLW0mecAi/dQXZjwhEfHrI/G3obhf7MFqgV5yMyp8v4mDp01LLX+0tuGv/3yKz/ro4Vsb/yLPnO7/vZSBOXw7/NrNsAcR8UZNVV+xNQrg=
+  file: aam-r*.apk
+  file_glob: true
+  skip_cleanup: true
+  on:
+    tags: true
+    repo: is3ny/automated-attendance-monitoring
