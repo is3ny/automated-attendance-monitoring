@@ -2,13 +2,16 @@ package com.example.attendance_checking;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,5 +40,14 @@ public class MainActivity extends AppCompatActivity {
         // Making list items appear on screen
         CourseListAdapter adapter = new CourseListAdapter(courses, students.get(0), this);
         listView.setAdapter(adapter);
+        ((Button)findViewById(R.id.button_to_beacon)).setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view.getId()==R.id.button_to_beacon){
+            Intent intent = new Intent(this, BeaconActivity.class);
+            startActivity(intent);
+        }
     }
 }
