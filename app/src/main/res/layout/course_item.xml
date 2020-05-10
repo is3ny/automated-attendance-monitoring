@@ -21,36 +21,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingStart="2dp"
-            android:paddingLeft="2dp"
-            android:textAlignment="viewStart"
             android:gravity="start"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:textAlignment="viewStart"
             android:textColor="@android:color/black"
-            android:textSize="18sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/list_course_prof_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingStart="2dp"
-            android:paddingLeft="2dp"
-            android:textAlignment="viewStart"
             android:gravity="start"
+            android:paddingLeft="4dp"
+            android:textAlignment="viewStart"
             android:textColor="@android:color/black"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/list_course_percentage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingEnd="2dp"
-            android:paddingRight="2dp"
-            android:textAlignment="viewEnd"
             android:gravity="end"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:textAlignment="viewEnd"
             android:textColor="@android:color/black"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
 
         <LinearLayout
             android:id="@+id/list_attendance"

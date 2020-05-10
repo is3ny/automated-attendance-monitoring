@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.SortedMap;
 
 public class Course {
+    Integer eventsNumber;
     String courseName;
     Professor professor;
     Map<Student, Attendance> attendanceMap;

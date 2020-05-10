@@ -104,6 +104,72 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setUpForProfessor(Connection conn){
         System.out.println("Professors");
+        String getAllCourses = "SELECT distinct(C.title)\n" +
+                "FROM courses C, events E, users U, eventsforcourse Ec\n" +
+                "WHERE U.nick='"+getIntent().getStringExtra("nick")+"'" +
+                " and Ec.courseid=C.courseid and E.evid=Ec.evid and U.uid=E.modid";
+        ResultSet rs = getRsFromQuery(conn, getAllCourses);
+        ArrayList<Course> courses = new ArrayList<>();
+        Professor me = new Professor(getIntent().getStringExtra("nick"));
+        while(true){
+            try {
+                if (!rs.next()) break;
+                String courseName = rs.getString("title");
+                courses.add(new Course(courseName, me));
+                String getStuds = "SELECT distinct(U.nick)\n" +
+                        "FROM courses C, events E, users U, eventsforcourse Ec, eventparticipants Ep\n" +
+                        "WHERE C.title='"+courseName+"' and Ec.courseid=C.courseid and" +
+                        " E.evid=Ec.evid and Ep.evid=E.evid and Ep.uid=U.uid";
+                System.out.println(getStuds);
+                ResultSet rsStudents = getRsFromQuery(conn, getStuds);
+                while(rsStudents.next()){
+                    Student currentStudent = new Student(rsStudents.getString("nick"));
+                    String getAtt = "SELECT Ep.chunks, E.real_start_time\n" +
+                            "FROM courses C, events E, users U, eventparticipants Ep, eventsforcourse Ec\n" +
+                            "WHERE U.nick='"+currentStudent.name+"' and C.title='"+courseName+"'\n" +
+                            "\tand Ep.uid=U.uid and E.evid=Ep.evid and Ec.evid=E.evid and C.courseid=Ec.courseid\n" +
+                            "ORDER BY E.real_start_time";
+                    ResultSet rsAttendance = getRsFromQuery(conn, getAtt);
+                    System.out.println(getAtt);
+                    ArrayList<Boolean> att = new ArrayList<>();
+                    while(rsAttendance.next()){
+                        String chunks = rsAttendance.getString("chunks");
+
+                        int checked=0;
+                        int size = chunks.length();
+                        for(int j=0; j<size; j++){
+                            if(chunks.charAt(j)=='1'){
+                                checked++;
+                            }
+                        }
+                        if(checked*2>=size){
+                            att.add(true);
+                        }
+                        else{
+                            att.add(false);
+                        }
+
+                    }
+                    courses.get(courses.size()-1).addAttendance(currentStudent,
+                            new Attendance(att.toArray(new Boolean[0])));
+
+                    String getCount = "SELECT count(distinct(E.real_start_time))\n" +
+                            "FROM courses C, events E, users U, eventparticipants Ep, eventsforcourse Ec\n" +
+                            "WHERE C.title='"+courses.get(courses.size()-1).courseName+"'\n" +
+                            "\tand Ep.uid=U.uid and E.evid=Ep.evid and Ec.evid=E.evid and C.courseid=Ec.courseid";
+                    ResultSet rsCount = getRsFromQuery(conn, getCount);
+                    rsCount.next();
+                    courses.get(courses.size()-1).eventsNumber = Math.toIntExact(rsCount.getLong("count"));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        // Making list items appear on screen
+        TeacherCourseListAdapter adapter = new TeacherCourseListAdapter(courses, this);
+        ListView listView = findViewById(R.id.list_view);
+        listView.setAdapter(adapter);
+        ((TextView)findViewById(R.id.textView_role)).setText("Role: Professor");
     }
 
     private void setUpForStudent(Connection conn){
