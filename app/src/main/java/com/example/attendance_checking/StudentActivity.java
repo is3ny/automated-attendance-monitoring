@@ -1,6 +1,5 @@
 package com.example.attendance_checking;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
@@ -45,14 +44,14 @@ public class StudentActivity extends AppCompatActivity implements View.OnClickLi
         port_et = findViewById(R.id.port_et);
         msg_et = findViewById(R.id.msg_et);
 
-        send_btn = findViewById(R.id.send_msg_btn);
+        send_btn = findViewById(R.id.start_bcast_btn);
         send_btn.setOnClickListener(this);
 
     }
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.send_msg_btn) {
+        if (view.getId() == R.id.start_bcast_btn) {
             int port = 1;
             DatagramSocket socket;
             InetAddress address;
@@ -89,7 +88,7 @@ public class StudentActivity extends AppCompatActivity implements View.OnClickLi
                 socket.send(packet);
             } catch (IOException e) {
                 Toast.makeText(this, "Failed to send packet.", Toast.LENGTH_LONG).show();
-                //e.printStackTrace();
+                e.printStackTrace();
             }
 
             socket.close();

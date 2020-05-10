@@ -49,11 +49,11 @@
         android:text="1488" />
 
     <TextView
-        android:id="@+id/msgLabel"
+        android:id="@+id/nameLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8sp"
-        android:text="Message:" />
+        android:text="Name:" />
 
     <EditText
         android:id="@+id/msg_et"
@@ -64,14 +64,24 @@
         android:layout_marginBottom="16dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Hello from Android!" />
+        android:text="Isabelle" />
 
     <Button
-        android:id="@+id/send_msg_btn"
+        android:id="@+id/start_bcast_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8sp"
         android:layout_marginEnd="8sp"
-        android:text="Send" />
+        android:layout_marginBottom="8sp"
+        android:text="Start Broadcast" />
+
+    <Button
+        android:id="@+id/stop_bcast_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8sp"
+        android:layout_marginEnd="8sp"
+        android:layout_marginBottom="8sp"
+        android:text="Stop Broadcast" />
 
 </LinearLayout>
