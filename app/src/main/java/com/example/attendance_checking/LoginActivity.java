@@ -38,9 +38,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         if (view.getId() == R.id.button_login) {
             String pass = ((EditText)findViewById(R.id.editText_pass)).getText().toString();
-            String email = ((EditText)findViewById(R.id.editText_email)).getText().toString();
+            String nick = ((EditText)findViewById(R.id.editText_email)).getText().toString();
             String getUser = "SELECT count(nick) FROM users " +
-                    "WHERE nick='" + email + "' and passwd='" + pass + "'";
+                    "WHERE nick='" + nick + "' and passwd='" + pass + "'";
             System.out.println(getUser);
             boolean login = false;
             ConnectTask connectTask = new ConnectTask();
@@ -76,9 +76,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             if (login) {
                 Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("nick", nick);
                 CloseConnectionTask close = new CloseConnectionTask();
                 close.execute(conn);
                 startActivity(intent);
+            }else{
+                Toast.makeText(this, "Invalid login or password", Toast.LENGTH_LONG).show();
             }
         }
     }
