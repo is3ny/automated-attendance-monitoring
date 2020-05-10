@@ -60,45 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         ((TextView)findViewById(R.id.textView_Nick)).setText("Name: "+getIntent().getStringExtra("nick"));
 
-//        //get professors
-//        String getStudents = "SELECT distinct(U.nick)\n" +
-//                "FROM users U, eventforcourse Ec\n" +
-//                "WHERE Ec.uid=U.uid";
-//        ResultSet rs = getRsFromQuery(conn, getStudents);
-//        ArrayList<Student> students = new ArrayList<>();
-//        if(rs!=null){
-//            while(true) {
-//                try {
-//                    if (!rs.next()) break;
-//                    students.add(new Student(rs.getString("nick")));
-//                } catch (SQLException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//
-//
-//
-//
-//
-//
-//        Professor p1 = new Professor("Luiz Jonata");
-//        Course c1 = new Course("Course number One", p1);
-//        Attendance a1 = new Attendance(new Boolean[]{true, false, true});
-//        c1.addAttendance(students.get(0), a1);
-//
-//        Professor p2 = new Professor("Some Strange Name");
-//        Course c2 = new Course("Course number Two", p2);
-//        Attendance a2 = new Attendance(new Boolean[]{false, false, true, true, true});
-//        c2.addAttendance(students.get(0), a2);
-//
-//        ArrayList<Course> courses = new ArrayList<>();
-//        courses.add(c1);
-//        courses.add(c2);
-//
-//        // Making list items appear on screen
-//        StudentCourseListAdapter adapter = new StudentCourseListAdapter(courses, students.get(0), this);
-//        listView.setAdapter(adapter);
+
         ((Button)findViewById(R.id.button_to_beacon)).setOnClickListener(this);
     }
 
