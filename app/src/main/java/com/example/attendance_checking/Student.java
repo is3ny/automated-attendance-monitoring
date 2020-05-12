@@ -1,5 +1,9 @@
 package com.example.attendance_checking;
 
 public class Student {
-    public Student(){}
+    String name;
+
+    public Student(String name){
+        this.name = name;
+    }
 }

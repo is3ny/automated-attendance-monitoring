@@ -1,127 +1,147 @@
 package com.example.attendance_checking;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.concurrent.ExecutionException;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     Connection conn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_login);
-        try
-        {
-            conn = getPostgreSQLConnection();
-
-            /* You can use the connection object to do any insert, delete, query or update action to the mysql server.*/
-
-            /* Do not forget to close the database connection after use, this can release the database connection.*/
-
-        }catch(Exception ex)
-        {
-            ex.printStackTrace();
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
-
         ((Button)findViewById(R.id.button_login)).setOnClickListener(this);
     }
 
-    private Connection getPostgreSQLConnection() {
-        /* Declare and initialize a sql Connection variable. */
-        Connection ret = null;
-        System.out.println("here");
-        try
-        {
 
-            /* Register jdbc driver class. */
-            Class.forName("org.postgresql.Driver");
-
-            /* Create connection url. */
-            String mysqlConnUrl = "jdbc:postgresql://10.0.2.2:5433/postgres";
-
-            /* user name. */
-            String mysqlUserName = "postgres";
-
-            /* password. */
-            String mysqlPassword = "1234567";
-
-            /* Get the Connection object. */
-            ret = DriverManager.getConnection(mysqlConnUrl, mysqlUserName , mysqlPassword);
-
-            /* Get related meta data for this mysql server to verify db connect successfully.. */
-            DatabaseMetaData dbmd = ret.getMetaData();
-
-            String dbName = dbmd.getDatabaseProductName();
-
-            String dbVersion = dbmd.getDatabaseProductVersion();
-
-            String dbUrl = dbmd.getURL();
-
-            String userName = dbmd.getUserName();
-
-            String driverName = dbmd.getDriverName();
-
-            System.out.println("Database Name is " + dbName);
-
-            System.out.println("Database Version is " + dbVersion);
-
-            System.out.println("Database Connection Url is " + dbUrl);
-
-            System.out.println("Database User Name is " + userName);
-
-            System.out.println("Database Driver Name is " + driverName);
-
-        }catch(Exception ex)
-        {
-            ex.printStackTrace();
-        }
-        return ret;
-    }
 
     @Override
     public void onClick(View view) {
-        if(view.getId()==R.id.button_login){
-            String pass = findViewById(R.id.editText_pass).toString();
-            String email = findViewById(R.id.editText_email).toString();
-            String getUser="SELECT count(nick) FROM users " +
-                    "WHERE nick='"+email+"' and passwd='"+pass+"'";
-            Statement st;
+        if (view.getId() == R.id.button_login) {
+            String pass = ((EditText)findViewById(R.id.editText_pass)).getText().toString();
+            String nick = ((EditText)findViewById(R.id.editText_email)).getText().toString();
+            String getUser = "SELECT count(nick) FROM users " +
+                    "WHERE nick='" + nick + "' and passwd='" + pass + "'";
+            System.out.println(getUser);
             boolean login = false;
+            ConnectTask connectTask = new ConnectTask();
+
+            connectTask.execute(this);
             try {
-                st = conn.createStatement();
-                ResultSet rs = st.executeQuery(getUser);
-                if(rs.getBigDecimal("count").compareTo(BigDecimal.valueOf(0))>0){
-                    login = true;
-                }
-                System.out.println("login");
-            } catch (SQLException e) {
+                conn = connectTask.get();
+            } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
 
-            System.out.println(login);
-            if(login) {
-                Intent intent = new Intent(this, MainActivity.class);
+
+            QueryTask querytTask = new QueryTask();
+
+            querytTask.execute(new Pair<Connection, String>(conn, getUser));
+            ResultSet rs =null;
+            try {
+                rs = querytTask.get();
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+            if(rs!=null){
                 try {
-                    conn.close();
+                    rs.next();
+                    if(rs.getLong("count")>0){
+                        login = true;
+                    }
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
+            }
+            System.out.println(login);
+
+            if (login) {
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("nick", nick);
+                CloseConnectionTask close = new CloseConnectionTask();
+                close.execute(conn);
                 startActivity(intent);
+            }else{
+                Toast.makeText(this, "Invalid login or password", Toast.LENGTH_LONG).show();
             }
         }
+    }
+    private final class CloseConnectionTask extends AsyncTask<Connection, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Connection... conns) {
+            Connection conn = conns[0];
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+    private final class QueryTask extends AsyncTask<Pair<Connection, String>, Void, ResultSet> {
+
+        @Override
+        protected ResultSet doInBackground(Pair<Connection, String>... pairs) {
+            Connection conn = pairs[0].first;
+            String query = pairs[0].second;
+            ResultSet rs = null;
+            try {
+                rs = conn.createStatement().executeQuery(query);
+
+
+                //Toast.makeText(contexts[0], "Connected", Toast.LENGTH_LONG).show();
+            } catch (SQLException e) {
+                //Toast.makeText(contexts[0], "Fail", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+            return rs;
+        }
+    }
+
+
+    private final class ConnectTask extends AsyncTask<Context, Void, Connection> {
+
+        @Override
+        protected Connection doInBackground(Context... contexts) {
+            Connection conn = null;
+            try {
+                conn = DriverManager.getConnection(
+                        "jdbc:postgresql://10.0.2.2:5433/attendance",
+                        "postgres",
+                        "1234567"
+                );
+
+
+                //Toast.makeText(contexts[0], "Connected", Toast.LENGTH_LONG).show();
+            } catch (SQLException e) {
+                Toast.makeText(contexts[0], "Fail", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+            return conn;
+        }
+
+
     }
 }

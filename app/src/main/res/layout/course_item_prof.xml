@@ -29,36 +29,48 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/list_course_prof_name"
+            android:id="@+id/list_course_studs_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="start"
             android:paddingLeft="4dp"
+            android:paddingRight="4dp"
             android:textAlignment="viewStart"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/list_course_percentage"
+            android:id="@+id/list_total_events"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/list_course_studs_att"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="end"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
-            android:textAlignment="viewEnd"
+            android:textAlignment="viewStart"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
 
         <LinearLayout
-            android:id="@+id/list_attendance"
+            android:id="@+id/list_students"
             android:layout_width="match_parent"
-            android:layout_height="16dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="2dp"
-            android:layout_weight="1"
-            android:orientation="horizontal" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:orientation="vertical"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp" />
 
     </LinearLayout>
 
